@@ -62,7 +62,7 @@ export default function LandingPage() {
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
         <div className="text-center mb-16">
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -229,19 +229,19 @@ export default function LandingPage() {
                   transition={{ duration: 0.5, delay: feature.delay }}
                 >
                   <div className="w-12 h-12 bg-[#8B5CF6]/10 rounded-lg flex items-center justify-center mb-4">
-                    {feature.icon}
-                  </div>
+                        {feature.icon}
+                      </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {feature.title}
-                  </h3>
+                      {feature.title}
+                    </h3>
                   <p className="text-gray-600">
-                    {feature.description}
-                  </p>
+                      {feature.description}
+                    </p>
                 </motion.div>
               ))}
-            </div>
           </div>
         </div>
+      </div>
 
         {/* How it Works Section */}
         <div className="py-24">
@@ -274,10 +274,10 @@ export default function LandingPage() {
                 </p>
               </motion.div>
             ))}
-          </div>
         </div>
+      </div>
 
-        {/* CTA Section */}
+      {/* CTA Section */}
         <div className="py-24 bg-[#8B5CF6] rounded-3xl">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-white sm:text-4xl">
@@ -306,7 +306,7 @@ export default function LandingPage() {
           <p className="text-gray-500">
             © {new Date().getFullYear()} Resume AI Builder. All rights reserved.
           </p>
-        </footer>
+      </footer>
       </div>
 
       {/* Sign Up Modal */}

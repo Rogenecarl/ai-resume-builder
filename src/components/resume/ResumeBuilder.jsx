@@ -4,7 +4,7 @@ import { ModernTemplate, MinimalTemplate } from './ResumeTemplates';
 import { generateResumeContent } from '../../config/gemini';
 import ExportOptions from './ExportOptions';
 import { motion } from 'framer-motion';
-import { FaUser, FaBriefcase, FaGraduationCap, FaTools, FaProjectDiagram, FaMagic, FaDownload } from 'react-icons/fa';
+import { FaUser, FaBriefcase, FaGraduationCap, FaTools, FaProjectDiagram, FaMagic, FaDownload, FaChevronRight } from 'react-icons/fa';
 
 const templates = {
   modern: ModernTemplate,
@@ -29,17 +29,11 @@ const itemVariants = {
   }
 };
 
-const FormCard = ({ children, title, icon: Icon }) => (
+const FormCard = ({ children }) => (
   <motion.div
     variants={itemVariants}
-    className="bg-gray-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 relative overflow-hidden"
+    className="bg-white rounded-lg shadow-sm p-6"
   >
-    <div className="flex items-center space-x-4 mb-6">
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl">
-        <Icon className="h-6 w-6 text-white" />
-      </div>
-      <h3 className="text-2xl font-bold text-white">{title}</h3>
-    </div>
     {children}
   </motion.div>
 );
@@ -60,8 +54,8 @@ export default function ResumeBuilder() {
   const { register, handleSubmit, reset } = useForm();
 
   const sections = [
-    { id: 'personalInfo', label: 'Personal Info', icon: FaUser },
-    { id: 'workExperience', label: 'Experience', icon: FaBriefcase },
+    { id: 'personalInfo', label: 'Personal info', icon: FaUser },
+    { id: 'workExperience', label: 'Work experience', icon: FaBriefcase },
     { id: 'education', label: 'Education', icon: FaGraduationCap },
     { id: 'skills', label: 'Skills', icon: FaTools },
     { id: 'projects', label: 'Projects', icon: FaProjectDiagram },
@@ -191,28 +185,47 @@ export default function ResumeBuilder() {
   };
 
   const renderForm = () => {
-    const inputClasses = "mt-1 block w-full bg-gray-800/30 border-gray-700 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400";
-    const labelClasses = "block text-sm font-medium text-gray-300 mb-1";
+    const inputClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm";
+    const textareaClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm min-h-[120px] resize-none";
+    const labelClasses = "block text-sm font-medium text-gray-900";
+    const aiBoxClasses = "flex items-center space-x-2 bg-[#8B5CF6]/5 p-4 rounded-md border border-[#8B5CF6]/10";
+    const checkboxClasses = "h-5 w-5 rounded border-gray-200 text-[#8B5CF6] focus:ring-[#8B5CF6] shadow-sm";
     
     const formContent = {
       personalInfo: (
         <>
           <div className="space-y-4">
-            <div>
-              <label className={labelClasses}>Full Name</label>
-              <input type="text" {...register('name')} className={inputClasses} placeholder="John Doe" />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClasses}>First name</label>
+                <input type="text" {...register('firstName')} className={inputClasses} />
+              </div>
+              <div>
+                <label className={labelClasses}>Last name</label>
+                <input type="text" {...register('lastName')} className={inputClasses} />
+              </div>
             </div>
             <div>
-              <label className={labelClasses}>Email</label>
-              <input type="email" {...register('email')} className={inputClasses} placeholder="john@example.com" />
+              <label className={labelClasses}>Job title</label>
+              <input type="text" {...register('jobTitle')} className={inputClasses} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClasses}>City</label>
+                <input type="text" {...register('city')} className={inputClasses} />
+              </div>
+              <div>
+                <label className={labelClasses}>Country</label>
+                <input type="text" {...register('country')} className={inputClasses} />
+              </div>
             </div>
             <div>
               <label className={labelClasses}>Phone</label>
-              <input type="tel" {...register('phone')} className={inputClasses} placeholder="+1 (555) 123-4567" />
+              <input type="tel" {...register('phone')} className={inputClasses} />
             </div>
             <div>
-              <label className={labelClasses}>Location</label>
-              <input type="text" {...register('location')} className={inputClasses} placeholder="City, State" />
+              <label className={labelClasses}>Email</label>
+              <input type="email" {...register('email')} className={inputClasses} />
             </div>
           </div>
         </>
@@ -234,15 +247,14 @@ export default function ResumeBuilder() {
             </div>
             <div>
               <label className={labelClasses}>Achievements</label>
-              <textarea {...register('achievements')} rows={4} className={inputClasses} 
+              <textarea {...register('achievements')} className={textareaClasses} 
                 placeholder="• Led development of feature X&#10;• Improved performance by Y%&#10;• Managed team of Z engineers" />
             </div>
-            <div className="flex items-center space-x-2 bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
-              <input type="checkbox" {...register('useAI')} 
-                className="h-5 w-5 rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-700" />
+            <div className={aiBoxClasses}>
+              <input type="checkbox" {...register('useAI')} className={checkboxClasses} />
               <div className="flex items-center">
-                <FaMagic className="text-blue-400 mr-2" />
-                <span className="text-sm text-gray-300">Use AI to generate professional description</span>
+                <FaMagic className="text-[#8B5CF6] mr-2" />
+                <span className="text-sm text-gray-700">Use AI to generate professional description</span>
               </div>
             </div>
           </div>
@@ -276,7 +288,7 @@ export default function ResumeBuilder() {
           <div className="space-y-4">
             <div>
               <label className={labelClasses}>Skills</label>
-              <textarea {...register('skills')} rows={4} className={inputClasses} 
+              <textarea {...register('skills')} className={textareaClasses} 
                 placeholder="JavaScript, React, Node.js, Python, etc." />
             </div>
             <div>
@@ -288,12 +300,11 @@ export default function ResumeBuilder() {
               <input type="text" {...register('focusAreas')} className={inputClasses} 
                 placeholder="Web Development, Cloud Computing" />
             </div>
-            <div className="flex items-center space-x-2 bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
-              <input type="checkbox" {...register('useAI')} 
-                className="h-5 w-5 rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-700" />
+            <div className={aiBoxClasses}>
+              <input type="checkbox" {...register('useAI')} className={checkboxClasses} />
               <div className="flex items-center">
-                <FaMagic className="text-blue-400 mr-2" />
-                <span className="text-sm text-gray-300">Use AI to generate relevant skills</span>
+                <FaMagic className="text-[#8B5CF6] mr-2" />
+                <span className="text-sm text-gray-700">Use AI to generate relevant skills</span>
               </div>
             </div>
           </div>
@@ -304,24 +315,29 @@ export default function ResumeBuilder() {
           <div className="space-y-4">
             <div>
               <label className={labelClasses}>Project Name</label>
-              <input type="text" {...register('name')} className={inputClasses} placeholder="E-commerce Platform" />
+              <input type="text" {...register('name')} className={inputClasses} />
+            </div>
+            <div>
+              <label className={labelClasses}>Role</label>
+              <input type="text" {...register('role')} className={inputClasses} />
             </div>
             <div>
               <label className={labelClasses}>Description</label>
-              <textarea {...register('description')} rows={4} className={inputClasses} 
-                placeholder="Built a full-stack e-commerce platform with features like..." />
+              <textarea {...register('description')} className={textareaClasses} />
             </div>
             <div>
               <label className={labelClasses}>Technologies Used</label>
-              <input type="text" {...register('technologies')} className={inputClasses} 
-                placeholder="React, Node.js, MongoDB" />
+              <input type="text" {...register('technologies')} className={inputClasses} />
             </div>
-            <div className="flex items-center space-x-2 bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
-              <input type="checkbox" {...register('useAI')} 
-                className="h-5 w-5 rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-700" />
+            <div>
+              <label className={labelClasses}>Project URL (optional)</label>
+              <input type="url" {...register('url')} className={inputClasses} />
+            </div>
+            <div className={aiBoxClasses}>
+              <input type="checkbox" {...register('useAI')} className={checkboxClasses} />
               <div className="flex items-center">
-                <FaMagic className="text-blue-400 mr-2" />
-                <span className="text-sm text-gray-300">Use AI to enhance project description</span>
+                <FaMagic className="text-[#8B5CF6] mr-2" />
+                <span className="text-sm text-gray-700">Use AI to enhance project description</span>
               </div>
             </div>
           </div>
@@ -329,9 +345,8 @@ export default function ResumeBuilder() {
       ),
     };
 
-    const currentSection = sections.find(s => s.id === activeSection);
     return (
-      <FormCard title={currentSection.label} icon={currentSection.icon}>
+      <FormCard>
         {formContent[activeSection]}
       </FormCard>
     );
@@ -340,139 +355,76 @@ export default function ResumeBuilder() {
   const TemplateComponent = templates[template];
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-30" />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.1, scale: 1 }}
-          transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-400 via-blue-500 to-transparent"
-        />
-      </div>
-
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-7xl mx-auto relative z-10"
-      >
-        {/* Header Section */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-            Build Your <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Professional Resume</span>
-          </h1>
-          <p className="text-xl text-gray-300">
-            Create a standout resume with our AI-powered builder
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-gray-900">Design your resume</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Follow the steps below to create your resume. Your progress will be saved automatically.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Template Selection */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <div className="bg-gray-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-            <h3 className="text-xl font-bold text-white mb-4">Choose Template Style</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {Object.entries(templates).map(([key]) => (
-                <motion.button
-                  key={key}
-                  onClick={() => setTemplate(key)}
-                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-                    template === key
-                      ? 'border-blue-500 bg-blue-500/10 text-blue-400'
-                      : 'border-gray-700 hover:border-blue-500/50 text-gray-400'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </motion.button>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Editor Section */}
-          <div className="space-y-6">
-            {/* Section Navigation */}
-            <motion.div variants={itemVariants} className="flex space-x-2 overflow-x-auto pb-2">
-              {sections.map((section) => (
-                <motion.button
-                  key={section.id}
+        {/* Progress Steps */}
+        <div className="mb-8">
+          <div className="flex items-center space-x-2 overflow-x-auto">
+            {sections.map((section, index) => (
+              <React.Fragment key={section.id}>
+                <button
                   onClick={() => setActiveSection(section.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                     activeSection === section.id
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800'
+                      ? 'bg-[#8B5CF6] text-white'
+                      : 'text-gray-500 hover:text-gray-700'
                   }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   <section.icon className="h-4 w-4" />
                   <span>{section.label}</span>
-                </motion.button>
-              ))}
-            </motion.div>
+                </button>
+                {index < sections.length - 1 && (
+                  <FaChevronRight className="h-4 w-4 text-gray-400" />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
 
-            {/* Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Form Section */}
+          <div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {renderForm()}
-
-              <motion.div variants={itemVariants} className="flex justify-between items-center">
-                <motion.button
+              
+              <div className="flex justify-end">
+                <button
                   type="submit"
-                  className={`inline-flex items-center space-x-2 px-6 py-3 rounded-xl text-white font-medium transition-all duration-200 ${
+                  className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium text-white ${
                     isGenerating
-                      ? 'bg-gray-700 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90'
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-[#8B5CF6] hover:bg-[#7C3AED]'
                   }`}
                   disabled={isGenerating}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
-                  {isGenerating ? (
-                    <>
-                      <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>Generating...</span>
-                    </>
-                  ) : (
-                    <>
-                      <FaMagic className="h-5 w-5" />
-                      <span>Save Section</span>
-                    </>
-                  )}
-                </motion.button>
-
-                <ExportOptions 
-                  resumeData={resumeData}
-                  componentRef={componentRef}
-                />
-              </motion.div>
+                  {isGenerating ? 'Saving...' : 'Save and Continue'}
+                </button>
+              </div>
             </form>
           </div>
 
           {/* Preview Section */}
-          <motion.div
-            variants={itemVariants}
-            className="bg-gray-800/50 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden"
-          >
-            <div className="p-4 border-b border-white/10 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-white">Preview</h3>
-              <div className="flex items-center space-x-2 text-gray-400">
-                <FaDownload className="h-5 w-5" />
-                <span>Export</span>
-              </div>
+          <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Preview</h3>
+              <ExportOptions 
+                resumeData={resumeData}
+                componentRef={componentRef}
+              />
             </div>
-            <div ref={componentRef} className="p-8 bg-white">
+            <div ref={componentRef} className="bg-white border rounded-lg">
               <TemplateComponent data={resumeData} />
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
