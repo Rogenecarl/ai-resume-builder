@@ -35,68 +35,76 @@ export const getGeminiResponse = async (prompt) => {
 
 export const generateResumeContent = async (section, userInput) => {
   const prompts = {
-    workExperience: `Generate a professional and impactful list of achievements and responsibilities for the following role:
-      Company: ${userInput.company}
-      Position: ${userInput.position}
-      Duration: ${userInput.duration}
-      
-      Please provide 4-5 bullet points that:
-      1. Start with strong action verbs
-      2. Include quantifiable results where possible
-      3. Highlight key achievements and impacts
-      4. Use industry-relevant terminology
-      
-      Format each point on a new line, without bullet points or numbers.`,
-    
-    skills: `Return only 10-12 relevant skills for a ${userInput.role} position with ${userInput.focusAreas} focus. Format as a comma-separated list with no introduction or additional text.`,
-    
-    projects: `Generate a compelling project description for:
-      Project Name: ${userInput.name}
-      Technologies: ${userInput.technologies}
-      
-      Create a concise description that:
-      1. Explains the project's purpose and impact
-      2. Highlights technical challenges overcome
-      3. Emphasizes your role and contributions
-      4. Includes measurable outcomes
-      
-      Keep it under 3-4 sentences, focusing on impact and technical excellence.`,
+    workExperience: `Write 4–5 resume bullet points for the following role:
+- Company: ${userInput.company}
+- Position: ${userInput.position}
+- Duration: ${userInput.duration}
 
-    summary: `Create a professional summary for a ${userInput.role} with ${userInput.experience} years of experience.
-      Expertise: ${userInput.expertise}
-      
-      Create a compelling summary that:
-      1. Highlights your professional identity
-      2. Emphasizes key achievements
-      3. Mentions relevant technical skills
-      4. States your career objectives
-      
-      Keep it under 3-4 sentences, making it impactful and memorable.`
+Instructions:
+- Start each point with a strong action verb
+- Use short, clear sentences
+- Focus on key achievements and responsibilities
+- Include numbers or results if available
+- Use industry-relevant terms
+- No bullet symbols or numbering
+- Output should be plain lines, one per bullet`,
+
+    skills: `List 10–12 relevant skills for a ${userInput.role} role.
+- Focus: ${userInput.focusAreas}
+- Use short phrases
+- Separate with commas only
+- No headings or extra text`,
+
+    projects: `Write a brief project description:
+- Project Name: ${userInput.name}
+- Technologies: ${userInput.technologies}
+
+Instructions:
+- 3–4 sentences only
+- Explain purpose and impact
+- Highlight your role and contributions
+- Mention key challenges solved
+- Include measurable outcomes
+- Be clear and concise`,
+
+    summary: `Write a professional summary for a resume:
+- Role: ${userInput.role}
+- Years of experience: ${userInput.experience}
+- Expertise: ${userInput.expertise}
+
+Instructions:
+- 3–4 short sentences
+- Start with professional title
+- Mention core expertise and strengths
+- Highlight top achievements or projects
+- Include key technical skills
+- State future goals or interests
+- Keep it clear, focused, and strong`
   };
 
   return await getGeminiResponse(prompts[section]);
 };
 
 export const generateCoverLetter = async (userInput) => {
-  const prompt = `Generate a professional cover letter with the following details:
-    Job Title: ${userInput.jobTitle}
-    Company Name: ${userInput.companyName}
-    Industry: ${userInput.industry}
-    Key Skills: ${userInput.keySkills}
-    Experience Level: ${userInput.experienceLevel}
-    Specific Achievements: ${userInput.achievements}
-    Company Research: ${userInput.companyInfo}
+  const prompt = `Write a professional cover letter using these details:
+- Job Title: ${userInput.jobTitle}
+- Company: ${userInput.companyName}
+- Industry: ${userInput.industry}
+- Key Skills: ${userInput.keySkills}
+- Experience Level: ${userInput.experienceLevel}
+- Notable Achievements: ${userInput.achievements}
+- Company Info: ${userInput.companyInfo}
 
-    Please create a compelling cover letter that:
-    1. Opens with a strong introduction showing enthusiasm for the role
-    2. Demonstrates knowledge of the company
-    3. Highlights relevant skills and experiences
-    4. Includes specific achievements that align with the role
-    5. Closes with a clear call to action
-    6. Maintains a professional yet engaging tone
-    7. Is structured in clear paragraphs
-    
-    Format the letter in a professional business letter style.`;
+Instructions:
+- Start with a strong introduction
+- Show enthusiasm for the role
+- Mention something specific about the company
+- Highlight your relevant experience and skills
+- Include a few key achievements
+- End with a clear call to action
+- Keep tone professional but engaging
+- Use standard business letter format
+- Write in paragraphs`
 
   return await getGeminiResponse(prompt);
 };

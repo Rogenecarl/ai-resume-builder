@@ -34,13 +34,15 @@ export const ModernTemplate = ({ data }) => (
           <div key={index} className="mb-4">
             <div className="flex justify-between items-baseline">
               <h3 className="font-medium text-gray-900">{exp.position}</h3>
-              <span className="text-gray-500 text-sm">{exp.duration}</span>
+              <span className="text-gray-500 text-sm whitespace-nowrap">
+                {`${exp.startDate} - ${exp.endDate}`}
+              </span>
             </div>
             <p className="text-[#8B5CF6] text-sm mb-2">{exp.company}</p>
             <ul className="text-gray-600 text-sm space-y-1">
               {exp.achievements.map((achievement, i) => (
                 <li key={i} className="flex items-start">
-                  <span>{achievement}</span>
+                  <span className="block">{achievement}</span>
                 </li>
               ))}
             </ul>
@@ -90,10 +92,14 @@ export const ModernTemplate = ({ data }) => (
           <div key={index} className="mb-3">
             <div className="flex justify-between items-baseline">
               <h3 className="font-medium text-gray-900">{edu.degree}</h3>
-              <span className="text-gray-500 text-sm">{edu.year}</span>
+              <span className="text-gray-500 text-sm whitespace-nowrap">
+                {`${edu.yearStarted} - ${edu.yearGraduated}`}
+              </span>
             </div>
             <p className="text-[#8B5CF6] text-sm">{edu.school}</p>
-            {edu.gpa && <p className="text-gray-600 text-sm">GPA: {edu.gpa}</p>}
+            <p className="text-gray-500 text-sm whitespace-nowrap">
+              {`${edu.gpa}`}
+            </p>
           </div>
         ))}
       </section>
@@ -140,13 +146,15 @@ export const MinimalTemplate = ({ data }) => (
           <div key={index} className="mb-4">
             <div className="flex justify-between items-baseline">
               <h3 className="font-medium text-gray-900">{exp.position}</h3>
-              <span className="text-gray-500 text-sm">{exp.duration}</span>
+              <span className="text-gray-500 text-sm whitespace-nowrap">
+                {`${exp.startDate} - ${exp.endDate}`}
+              </span>
             </div>
             <p className="text-[#8B5CF6] text-sm mb-2">{exp.company}</p>
             <ul className="text-gray-600 text-sm space-y-1">
               {exp.achievements.map((achievement, i) => (
                 <li key={i} className="flex items-start">
-                  <span>{achievement}</span>
+                  <span className="block">{achievement}</span>
                 </li>
               ))}
             </ul>
@@ -162,9 +170,16 @@ export const MinimalTemplate = ({ data }) => (
             <h2 className="text-lg font-semibold text-gray-900 mb-3">Education</h2>
             {data.education.map((edu, index) => (
               <div key={index} className="mb-3">
-                <h3 className="font-medium text-gray-900">{edu.degree}</h3>
+                <div className="flex justify-between items-baseline">
+                  <h3 className="font-medium text-gray-900">{edu.degree}</h3>
+                  <span className="text-gray-500 text-sm whitespace-nowrap">
+                    {`${edu.yearStarted} - ${edu.yearGraduated}`}
+                  </span>
+                </div>
                 <p className="text-[#8B5CF6] text-sm">{edu.school}</p>
-                <p className="text-gray-500 text-sm">{edu.year}</p>
+                <p className="text-gray-500 text-sm whitespace-nowrap">
+                  {`${edu.yearStarted} - ${edu.yearGraduated}`}
+                </p>
               </div>
             ))}
           </section>

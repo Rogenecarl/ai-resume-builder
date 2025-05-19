@@ -89,6 +89,48 @@ export default function ResumeBuilder() {
     { code: '+33', country: 'France' }
   ];
 
+  const degreeOptions = [
+    "Bachelor of Science (BS)",
+    "Bachelor of Arts (BA)",
+    "Bachelor of Business Administration (BBA)",
+    "Bachelor of Engineering (BE/BEng)",
+    "Bachelor of Technology (BTech)",
+    "Master of Science (MS/MSc)",
+    "Master of Arts (MA)",
+    "Master of Business Administration (MBA)",
+    "Master of Engineering (ME/MEng)",
+    "Doctor of Philosophy (PhD)",
+    "Associate Degree",
+    "High School Diploma",
+    "Other"
+  ];
+
+  // Add this after phoneCountryCodes
+  const universities = {
+    "United States": [
+      "Harvard University",
+      "Stanford University",
+      "Massachusetts Institute of Technology",
+      "Yale University",
+      "Princeton University"
+    ],
+    "United Kingdom": [
+      "University of Oxford",
+      "University of Cambridge",
+      "Imperial College London",
+      "University College London",
+      "London School of Economics"
+    ],
+    "Canada": [
+      "University of Toronto",
+      "University of British Columbia",
+      "McGill University",
+      "University of Montreal",
+      "University of Alberta"
+    ],
+    // Add more countries and their universities as needed
+  };
+
   const sections = [
     { id: 'personalInfo', label: 'Personal info', icon: FaUser },
     { id: 'workExperience', label: 'Work experience', icon: FaBriefcase },
@@ -106,11 +148,23 @@ export default function ResumeBuilder() {
       let parsedContent;
       switch (section) {
         case 'workExperience':
+          // Ensure each achievement starts with a bullet point and is concise
+          const achievements = generatedContent.split('\n')
+            .map(item => item.trim())
+            .filter(item => item)
+            .map(item => {
+              // Remove existing bullet points or dashes if any
+              let clean = item.replace(/^[-•*]\s*/, '');
+              // Ensure it starts with a bullet point
+              return `- ${clean}`;
+            });
+
           parsedContent = {
             position: data.position,
             company: data.company,
-            duration: data.duration,
-            achievements: generatedContent.split('\n').filter(item => item.trim()),
+            startDate: data.startDate,
+            endDate: data.endDate,
+            achievements: achievements,
           };
           setResumeData(prev => ({
             ...prev,
@@ -119,7 +173,11 @@ export default function ResumeBuilder() {
           break;
 
         case 'skills':
-          parsedContent = generatedContent.split(',').map(skill => skill.trim());
+          // Format skills as a concise list
+          parsedContent = generatedContent
+            .split(',')
+            .map(skill => skill.trim())
+            .filter(skill => skill.length > 0);
           setResumeData(prev => ({
             ...prev,
             skills: parsedContent,
@@ -127,9 +185,20 @@ export default function ResumeBuilder() {
           break;
 
         case 'projects':
+          // Format project description as bullet points
+          const description = generatedContent
+            .split('\n')
+            .map(item => item.trim())
+            .filter(item => item)
+            .map(item => {
+              let clean = item.replace(/^[-•*]\s*/, '');
+              return `- ${clean}`;
+            })
+            .join('\n');
+
           parsedContent = {
             name: data.name,
-            description: generatedContent,
+            description: description,
           };
           setResumeData(prev => ({
             ...prev,
@@ -163,10 +232,19 @@ export default function ResumeBuilder() {
         if (data.useAI) {
           await handleGenerateContent('workExperience', data);
         } else {
+          const formatDate = (dateString) => {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const month = date.toLocaleDateString('en-US', { month: 'long' });
+            const year = date.getFullYear();
+            return `${month} ${year}`; // Will return format like "July 2024"
+          };
+
           const newExperience = {
             position: data.position,
             company: data.company,
-            duration: data.duration,
+            startDate: formatDate(data.startDate),
+            endDate: data.currentlyWorking ? 'Present' : formatDate(data.endDate),
             achievements: data.achievements.split('\n').filter(item => item.trim()),
           };
           setResumeData(prev => ({
@@ -177,10 +255,19 @@ export default function ResumeBuilder() {
         break;
 
       case 'education':
+        const formatDate = (dateString) => {
+          if (!dateString) return '';
+          const date = new Date(dateString);
+          const month = date.toLocaleDateString('en-US', { month: 'long' });
+          const year = date.getFullYear();
+          return `${month} ${year}`; // Will return format like "July 2024"
+        };
+
         const newEducation = {
-          degree: data.degree,
-          school: data.school,
-          year: data.year,
+          degree: data.degree === 'Other' ? data.customDegree : data.degree,
+          school: data.school === 'Other' ? data.customSchool : data.school,
+          yearStarted: formatDate(data.yearStarted),
+          yearGraduated: data.currentlyStudying ? 'Present' : formatDate(data.yearGraduated),
           gpa: data.gpa,
         };
         setResumeData(prev => ({
@@ -324,9 +411,34 @@ export default function ResumeBuilder() {
               <label className={labelClasses}>Company</label>
               <input type="text" {...register('company')} className={inputClasses} placeholder="Tech Company Inc." />
             </div>
-            <div>
-              <label className={labelClasses}>Duration</label>
-              <input type="text" {...register('duration')} className={inputClasses} placeholder="Jan 2020 - Present" />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClasses}>Start Date</label>
+                <input 
+                  type="date" 
+                  {...register('startDate')} 
+                  className={inputClasses}
+                />
+              </div>
+              <div>
+                <label className={labelClasses}>End Date</label>
+                <div className="flex items-center space-x-2">
+                  <input 
+                    type="date" 
+                    {...register('endDate')} 
+                    className={`${inputClasses} ${watch('currentlyWorking') ? 'opacity-50' : ''}`}
+                    disabled={watch('currentlyWorking')}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input 
+                type="checkbox" 
+                {...register('currentlyWorking')} 
+                className="h-4 w-4 rounded border-gray-300 text-[#8B5CF6] focus:ring-[#8B5CF6]"
+              />
+              <label className="text-sm text-gray-700">I currently work here</label>
             </div>
             <div>
               <label className={labelClasses}>Achievements</label>
@@ -348,16 +460,78 @@ export default function ResumeBuilder() {
           <div className="space-y-4">
             <div>
               <label className={labelClasses}>Degree</label>
-              <input type="text" {...register('degree')} className={inputClasses} 
-                placeholder="Bachelor of Science in Computer Science" />
+              <div className="relative">
+                <select 
+                  {...register('degree')} 
+                  className={`${selectClasses} ${watch('degree') === 'Other' ? 'hidden' : 'block'}`}
+                >
+                  <option value="">Select a degree</option>
+                  {degreeOptions.map((degree) => (
+                    <option key={degree} value={degree}>{degree}</option>
+                  ))}
+                  <option value="Other">Other - Type your own</option>
+                </select>
+                {watch('degree') === 'Other' && (
+                  <input
+                    type="text"
+                    {...register('customDegree')}
+                    className={inputClasses}
+                    placeholder="Enter your degree"
+                  />
+                )}
+              </div>
             </div>
             <div>
               <label className={labelClasses}>School</label>
-              <input type="text" {...register('school')} className={inputClasses} placeholder="University Name" />
+              <div className="relative">
+                <select 
+                  {...register('school')} 
+                  className={`${selectClasses} ${watch('school') === 'Other' ? 'hidden' : 'block'}`}
+                >
+                  <option value="">Select a school</option>
+                  {universities[watch('country')] && universities[watch('country')].map((school) => (
+                    <option key={school} value={school}>{school}</option>
+                  ))}
+                  <option value="Other">Other - Type your own</option>
+                </select>
+                {watch('school') === 'Other' && (
+                  <input
+                    type="text"
+                    {...register('customSchool')}
+                    className={inputClasses}
+                    placeholder="Enter your school name"
+                  />
+                )}
+              </div>
             </div>
-            <div>
-              <label className={labelClasses}>Year</label>
-              <input type="text" {...register('year')} className={inputClasses} placeholder="2020 - 2024" />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClasses}>Year Started</label>
+                <input 
+                  type="date" 
+                  {...register('yearStarted')} 
+                  className={inputClasses}
+                />
+              </div>
+              <div>
+                <label className={labelClasses}>Year Graduated</label>
+                <div className="flex items-center space-x-2">
+                  <input 
+                    type="date" 
+                    {...register('yearGraduated')} 
+                    className={`${inputClasses} ${watch('currentlyStudying') ? 'opacity-50' : ''}`}
+                    disabled={watch('currentlyStudying')}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input 
+                type="checkbox" 
+                {...register('currentlyStudying')} 
+                className="h-4 w-4 rounded border-gray-300 text-[#8B5CF6] focus:ring-[#8B5CF6]"
+              />
+              <label className="text-sm text-gray-700">I am currently studying here</label>
             </div>
             <div>
               <label className={labelClasses}>GPA (optional)</label>
@@ -438,7 +612,12 @@ export default function ResumeBuilder() {
   const TemplateComponent = templates[template];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gray-50"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-gray-900">Design your resume</h1>
@@ -508,6 +687,6 @@ export default function ResumeBuilder() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
