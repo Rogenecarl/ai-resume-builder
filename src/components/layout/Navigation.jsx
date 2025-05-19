@@ -18,7 +18,7 @@ export default function Navigation() {
 
   const navItems = currentUser ? [
     { path: '/dashboard', label: 'Dashboard' },
-    { path: '/resume', label: 'Resume Builder' },
+    { path: '/resume', label: 'ResumAI' },
     { path: '/cover-letter', label: 'Cover Letter' }
   ] : [];
 
@@ -44,7 +44,7 @@ export default function Navigation() {
                     <path d="M13 20L18 25L28 15" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <span className="text-xl font-bold text-gray-900">Resume Builder</span>
+                <span className="text-xl font-bold text-gray-900">ResumAI</span>
               </Link>
 
               {currentUser && (
@@ -97,7 +97,7 @@ export default function Navigation() {
                     onClick={() => setIsSignUpModalOpen(true)}
                     className="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-[#8B5CF6] rounded-full hover:bg-[#7C3AED] transition-colors duration-200"
                   >
-                    Get Started
+                    Sign up
                   </motion.button>
                 </>
               )}

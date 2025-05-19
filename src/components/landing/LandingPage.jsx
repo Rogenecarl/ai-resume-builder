@@ -1,55 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FaRegLightbulb, FaMagic, FaRocket, FaRegClock, FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
+import { FaRobot, FaRegClock, FaRegFileAlt, FaMagic } from 'react-icons/fa';
 import { HiOutlineTemplate, HiOutlineDocumentText } from 'react-icons/hi';
-import { BsGoogle } from 'react-icons/bs';
+import { BsSpeedometer } from 'react-icons/bs';
+import SignUp from '../auth/SignUp';
 
 const features = [
   {
-    icon: <FaMagic className="h-6 w-6 text-[#8B5CF6]" />,
-    title: 'AI-Powered Content Generation',
-    description: 'Leverage Google\'s Gemini AI to create compelling resumes and cover letters tailored to your industry.',
+    icon: <FaRobot className="h-6 w-6 text-[#8B5CF6]" />,
+    title: 'AI-Powered Writing',
+    description: 'Our advanced AI analyzes your experience and generates professional, tailored content for your resume.',
     delay: 0.2
   },
   {
     icon: <HiOutlineTemplate className="h-6 w-6 text-[#8B5CF6]" />,
-    title: 'Professional Templates',
-    description: 'Choose from a variety of ATS-friendly templates designed by HR professionals.',
+    title: 'ATS-Friendly Templates',
+    description: 'Choose from professionally designed templates that are optimized for Applicant Tracking Systems.',
     delay: 0.4
   },
   {
     icon: <FaRegClock className="h-6 w-6 text-[#8B5CF6]" />,
-    title: 'Real-time Preview',
-    description: 'See changes instantly as you edit, ensuring your document looks perfect before export.',
+    title: 'Quick Generation',
+    description: 'Create a professional resume in minutes, not hours. Let AI handle the writing while you focus on the content.',
     delay: 0.6
   },
   {
-    icon: <FaRocket className="h-6 w-6 text-[#8B5CF6]" />,
-    title: 'Quick Export',
-    description: 'Export your documents in multiple formats including PDF and Word, ready for submission.',
+    icon: <FaMagic className="h-6 w-6 text-[#8B5CF6]" />,
+    title: 'Smart Formatting',
+    description: 'Automatic formatting and layout optimization ensures your resume looks perfect on any device.',
     delay: 0.8
   }
 ];
 
-const testimonials = [
+const howItWorks = [
   {
-    name: 'Sarah Johnson',
-    role: 'Software Engineer',
-    content: 'The AI suggestions helped me highlight achievements I would have otherwise overlooked. Landed my dream job!',
-    image: 'https://randomuser.me/api/portraits/women/1.jpg',
+    icon: <FaRegFileAlt className="h-8 w-8 text-[#8B5CF6]" />,
+    title: '1. Enter Your Details',
+    description: 'Input your work experience, skills, and achievements.',
     delay: 0.2
   },
   {
-    name: 'Michael Chen',
-    role: 'Marketing Manager',
-    content: 'The modern templates and real-time preview feature made creating my resume a breeze.',
-    image: 'https://randomuser.me/api/portraits/men/2.jpg',
+    icon: <BsSpeedometer className="h-8 w-8 text-[#8B5CF6]" />,
+    title: '2. AI Generation',
+    description: 'Our AI crafts compelling content and optimizes your resume.',
     delay: 0.4
+  },
+  {
+    icon: <HiOutlineDocumentText className="h-8 w-8 text-[#8B5CF6]" />,
+    title: '3. Download & Apply',
+    description: 'Export your polished resume and start applying to jobs.',
+    delay: 0.6
   }
 ];
 
 export default function LandingPage() {
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -72,68 +79,143 @@ export default function LandingPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Link
-                  to="/signup"
+                <button
+                  onClick={() => setIsSignUpModalOpen(true)}
                   className="inline-flex items-center px-8 py-3 text-base font-medium text-white bg-[#8B5CF6] rounded-full hover:bg-[#7C3AED] transition-colors duration-200"
                 >
                   Get Started <span className="ml-2">→</span>
-                </Link>
+                </button>
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <button
-                  className="inline-flex items-center px-8 py-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <span className="mr-2">▶</span> Watch video
-                </button>
               </motion.div>
             </div>
           </motion.div>
         </div>
 
-        {/* Featured Section */}
-        <div className="mb-24">
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-wide text-center mb-8">
-            Featured in
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-center justify-items-center max-w-2xl mx-auto">
-            {/* YouTube */}
-            <div className="flex items-center space-x-2">
-              <svg className="w-8 h-8 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-              <span className="text-xl font-medium text-gray-400">YouTube</span>
-            </div>
-            
-            {/* Product Hunt */}
-            <div className="flex items-center space-x-2">
-              <svg className="w-8 h-8 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M13.604 8.4h-3.405V12h3.405c.995 0 1.801-.806 1.801-1.801 0-.995-.806-1.799-1.801-1.799zM12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm1.604 14.4h-3.405V18H7.801V6h5.803c2.207 0 4.001 1.794 4.001 4.001 0 2.205-1.794 4.399-4.001 4.399z"/>
-              </svg>
-              <span className="text-xl font-medium text-gray-400">Product Hunt</span>
-            </div>
+        {/* Resume Preview Section */}
+        <div className="relative mt-20 mb-32">
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white transform -skew-y-6"></div>
+          <div className="relative">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="max-w-5xl mx-auto"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                <div className="flex">
+                  {/* Left Preview */}
+                  <div className="w-2/3 p-8 border-r border-gray-100">
+                    <div className="space-y-6">
+                      {/* Header */}
+                      <div className="border-b border-gray-200 pb-4">
+                        <h2 className="text-3xl font-bold text-gray-900">John Developer</h2>
+                        <p className="text-[#8B5CF6] mt-1">Senior Software Engineer</p>
+                      </div>
+                      
+                      {/* Experience */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Experience</h3>
+                        <div className="space-y-4">
+                          <div>
+                            <div className="flex justify-between">
+                              <p className="font-medium">Tech Solutions Inc.</p>
+                              <p className="text-gray-500">2020 - Present</p>
+                            </div>
+                            <p className="text-[#8B5CF6] text-sm">Lead Developer</p>
+                            <ul className="mt-2 text-sm text-gray-600 space-y-1">
+                              <li>• Led development of cloud-native applications</li>
+                              <li>• Managed team of 5 developers</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
 
-            {/* Reddit */}
-            <div className="flex items-center space-x-2">
-              <svg className="w-8 h-8 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>
-              </svg>
-              <span className="text-xl font-medium text-gray-400">reddit</span>
-            </div>
+                      {/* Skills */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Skills</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {['React', 'Node.js', 'Python', 'AWS', 'Docker'].map((skill) => (
+                            <span
+                              key={skill}
+                              className="px-3 py-1 bg-[#8B5CF6]/10 text-[#8B5CF6] rounded-full text-sm"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Preview */}
+                  <div className="w-1/3 bg-gray-50 p-8">
+                    <div className="space-y-6">
+                      {/* Contact */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Contact</h3>
+                        <div className="space-y-2 text-sm text-gray-600">
+                          <p>john@example.com</p>
+                          <p>(555) 123-4567</p>
+                          <p>San Francisco, CA</p>
+                        </div>
+                      </div>
+
+                      {/* Education */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Education</h3>
+                        <div>
+                          <p className="font-medium">Computer Science, BS</p>
+                          <p className="text-sm text-gray-600">Tech University</p>
+                          <p className="text-sm text-gray-500">2016 - 2020</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Elements */}
+                <motion.div
+                  className="absolute -top-4 -right-4 w-20 h-20 bg-[#8B5CF6]/10 rounded-full"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 90, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                />
+                <motion.div
+                  className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#8B5CF6]/20 rounded-full"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    rotate: [0, -90, 0],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                />
+              </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Features Section */}
-        <div className="py-24 bg-gray-50">
+        <div className="py-24 bg-gray-50 rounded-3xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-gray-900">
-                Everything you need to land your dream job
+                Why Choose Our AI Resume Builder?
               </h2>
               <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-                Our AI-powered platform helps you create professional resumes and cover letters that get noticed.
+                Create a professional resume that stands out and gets you noticed by hiring managers
               </p>
             </div>
 
@@ -163,107 +245,72 @@ export default function LandingPage() {
 
         {/* How it Works Section */}
         <div className="py-24">
-          <div className="text-center">
+          <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900">
-              How it Works?
+              Build Your Resume in 3 Simple Steps
             </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Give mock interview in just 3 simple easy steps
+            <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
+              Our AI-powered platform makes resume creation quick and effortless
             </p>
           </div>
-        </div>
 
-        {/* Testimonials Section */}
-        <div className="py-24 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-gray-900">
-                Trusted by job seekers worldwide
-              </h2>
-              <p className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-                See what our users have to say about their success stories
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  className="bg-white p-6 rounded-xl shadow-sm"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: testimonial.delay }}
-                >
-                  <div className="flex items-center mb-4">
-                    <img
-                      className="h-12 w-12 rounded-full"
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                    />
-                    <div className="ml-4">
-                      <div className="text-lg font-medium text-gray-900">{testimonial.name}</div>
-                      <div className="text-[#8B5CF6]">{testimonial.role}</div>
-                    </div>
-                  </div>
-                  <p className="text-gray-600">{testimonial.content}</p>
-                </motion.div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+            {howItWorks.map((step, index) => (
+              <motion.div
+                key={index}
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: step.delay }}
+              >
+                <div className="w-16 h-16 bg-[#8B5CF6]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  {step.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600">
+                  {step.description}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
 
         {/* CTA Section */}
-        <div className="py-24 bg-[#8B5CF6]">
+        <div className="py-24 bg-[#8B5CF6] rounded-3xl">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-white sm:text-4xl">
-              Ready to boost your career?
+              Ready to Build Your Professional Resume?
             </h2>
             <p className="mt-4 text-xl text-white/90">
-              Start building your resume today.
+              Join thousands of successful job seekers who found their dream jobs
             </p>
             <motion.div
               className="mt-8"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Link
-                to="/signup"
+              <button
+                onClick={() => setIsSignUpModalOpen(true)}
                 className="inline-flex items-center px-8 py-3 text-base font-medium text-[#8B5CF6] bg-white rounded-full hover:bg-gray-50 transition-colors duration-200"
               >
                 Get Started Free
-              </Link>
+              </button>
             </motion.div>
           </div>
         </div>
 
         {/* Footer */}
-        <footer className="bg-white border-t border-gray-200">
-          <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
-            <div className="flex justify-center space-x-6 md:order-2">
-              {[
-                { icon: <FaTwitter className="h-6 w-6" />, href: '#', label: 'Twitter' },
-                { icon: <FaGithub className="h-6 w-6" />, href: '#', label: 'GitHub' },
-                { icon: <FaLinkedin className="h-6 w-6" />, href: '#', label: 'LinkedIn' }
-              ].map((item) => (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
-                  className="text-gray-400 hover:text-[#8B5CF6]"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <span className="sr-only">{item.label}</span>
-                  {item.icon}
-                </motion.a>
-              ))}
-            </div>
-            <div className="mt-8 md:mt-0 md:order-1">
-              <p className="text-center text-base text-gray-400">
-                &copy; {new Date().getFullYear()} Resume Builder. All rights reserved.
-              </p>
-            </div>
-          </div>
+        <footer className="py-12 text-center">
+          <p className="text-gray-500">
+            © {new Date().getFullYear()} Resume AI Builder. All rights reserved.
+          </p>
         </footer>
       </div>
+
+      {/* Sign Up Modal */}
+      <SignUp isOpen={isSignUpModalOpen} onClose={() => setIsSignUpModalOpen(false)} />
     </div>
   );
 }
