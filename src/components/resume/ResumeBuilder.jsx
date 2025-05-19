@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { ModernTemplate, MinimalTemplate } from './ResumeTemplates';
 import { generateResumeContent } from '../../config/gemini';
+import { countries } from '../../config/locationData';
 import ExportOptions from './ExportOptions';
 import { motion } from 'framer-motion';
 import { FaUser, FaBriefcase, FaGraduationCap, FaTools, FaProjectDiagram, FaMagic, FaDownload, FaChevronRight } from 'react-icons/fa';
@@ -41,6 +42,8 @@ const FormCard = ({ children }) => (
 export default function ResumeBuilder() {
   const [activeSection, setActiveSection] = useState('personalInfo');
   const [template, setTemplate] = useState('modern');
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [availableCities, setAvailableCities] = useState([]);
   const [resumeData, setResumeData] = useState({
     personalInfo: {},
     summary: '',
@@ -51,7 +54,40 @@ export default function ResumeBuilder() {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const componentRef = useRef();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setValue, watch } = useForm();
+
+  // Watch for country changes
+  const watchCountry = watch('country');
+
+  // Update cities when country changes
+  React.useEffect(() => {
+    if (watchCountry) {
+      const country = countries.find(c => c.name === watchCountry);
+      if (country) {
+        setAvailableCities(country.cities);
+        setValue('city', ''); // Reset city when country changes
+      }
+    }
+  }, [watchCountry, setValue]);
+
+  // Add phone country codes data
+  const phoneCountryCodes = [
+    { code: '+1', country: 'United States/Canada' },
+    { code: '+44', country: 'United Kingdom' },
+    { code: '+61', country: 'Australia' },
+    { code: '+63', country: 'Philippines' },
+    { code: '+65', country: 'Singapore' },
+    { code: '+81', country: 'Japan' },
+    { code: '+82', country: 'South Korea' },
+    { code: '+91', country: 'India' },
+    { code: '+86', country: 'China' },
+    { code: '+60', country: 'Malaysia' },
+    { code: '+66', country: 'Thailand' },
+    { code: '+84', country: 'Vietnam' },
+    { code: '+62', country: 'Indonesia' },
+    { code: '+49', country: 'Germany' },
+    { code: '+33', country: 'France' }
+  ];
 
   const sections = [
     { id: 'personalInfo', label: 'Personal info', icon: FaUser },
@@ -188,8 +224,11 @@ export default function ResumeBuilder() {
     const inputClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm";
     const textareaClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm min-h-[120px] resize-none";
     const labelClasses = "block text-sm font-medium text-gray-900";
+    const selectClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm appearance-none cursor-pointer";
     const aiBoxClasses = "flex items-center space-x-2 bg-[#8B5CF6]/5 p-4 rounded-md border border-[#8B5CF6]/10";
     const checkboxClasses = "h-5 w-5 rounded border-gray-200 text-[#8B5CF6] focus:ring-[#8B5CF6] shadow-sm";
+    const selectWrapperClasses = "relative mt-1";
+    const selectIconClasses = "absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none text-gray-400";
     
     const formContent = {
       personalInfo: (
@@ -211,17 +250,61 @@ export default function ResumeBuilder() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelClasses}>City</label>
-                <input type="text" {...register('city')} className={inputClasses} />
+                <label className={labelClasses}>Country</label>
+                <div className={selectWrapperClasses}>
+                  <select {...register('country')} className={selectClasses}>
+                    <option value="">Select a country</option>
+                    {countries.map((country) => (
+                      <option key={country.name} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className={selectIconClasses}>
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
               </div>
               <div>
-                <label className={labelClasses}>Country</label>
-                <input type="text" {...register('country')} className={inputClasses} />
+                <label className={labelClasses}>City</label>
+                <div className={selectWrapperClasses}>
+                  <select {...register('city')} className={selectClasses} disabled={!watchCountry}>
+                    <option value="">Select a city</option>
+                    {availableCities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                  <div className={selectIconClasses}>
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
             <div>
               <label className={labelClasses}>Phone</label>
-              <input type="tel" {...register('phone')} className={inputClasses} />
+              <div className="phone-input-group">
+                <div className={selectWrapperClasses}>
+                  <select {...register('phoneCountry')} className={selectClasses} defaultValue="+1">
+                    {phoneCountryCodes.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.code} {country.country}
+                      </option>
+                    ))}
+                  </select>
+                  <div className={selectIconClasses}>
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+                <input type="tel" {...register('phone')} className={inputClasses} placeholder="(555) 123-4567" />
+              </div>
             </div>
             <div>
               <label className={labelClasses}>Email</label>

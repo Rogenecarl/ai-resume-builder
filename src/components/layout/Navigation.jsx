@@ -39,10 +39,7 @@ export default function Navigation() {
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-3">
                 <div className="w-8 h-8">
-                  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="20" r="20" fill="#8B5CF6" />
-                    <path d="M13 20L18 25L28 15" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                                    <img src="/logog.png" alt="Logo" width="40" height="40" />
                 </div>
                 <span className="text-xl font-bold text-gray-900">ResumAI</span>
               </Link>

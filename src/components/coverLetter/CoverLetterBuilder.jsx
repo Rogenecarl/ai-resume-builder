@@ -32,13 +32,11 @@ const itemVariants = {
 const FormCard = ({ children, title, icon: Icon }) => (
   <motion.div
     variants={itemVariants}
-    className="bg-gray-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 relative overflow-hidden"
+    className="bg-white rounded-lg shadow-sm p-6"
   >
-    <div className="flex items-center space-x-4 mb-6">
-      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl">
-        <Icon className="h-6 w-6 text-white" />
-      </div>
-      <h3 className="text-2xl font-bold text-white">{title}</h3>
+    <div className="flex items-center space-x-2 mb-6">
+      <Icon className="h-5 w-5 text-[#8B5CF6]" />
+      <h3 className="text-lg font-medium text-gray-900">{title}</h3>
     </div>
     {children}
   </motion.div>
@@ -90,66 +88,47 @@ export default function CoverLetterBuilder() {
     }
   };
 
-  const inputClasses = "mt-1 block w-full bg-gray-800/30 border-gray-700 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400";
-  const labelClasses = "block text-sm font-medium text-gray-300 mb-1";
+  const inputClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm";
+  const textareaClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm min-h-[120px] resize-none";
+  const labelClasses = "block text-sm font-medium text-gray-900";
+  const selectClasses = "mt-1 block w-full rounded-md border border-gray-200 bg-white px-3 py-2.5 text-gray-900 shadow-sm ring-0 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] sm:text-sm";
 
   const TemplateComponent = templates[template];
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-30" />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.1, scale: 1 }}
-          transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-400 via-blue-500 to-transparent"
-        />
-      </div>
-
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-7xl mx-auto relative z-10"
-      >
-        {/* Header Section */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <h1 className="text-4xl font-bold text-white sm:text-5xl mb-4">
-            Create Your <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Cover Letter</span>
-          </h1>
-          <p className="text-xl text-gray-300">
-            Craft a compelling cover letter with our AI-powered assistant
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-gray-900">Design your cover letter</h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Follow the steps below to create your cover letter. Your progress will be saved automatically.
           </p>
-        </motion.div>
+        </div>
 
         {/* Template Selection */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <div className="bg-gray-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-            <h3 className="text-xl font-bold text-white mb-4">Choose Template Style</h3>
+        <div className="mb-8">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">Choose Template Style</h3>
             <div className="grid grid-cols-2 gap-4">
               {Object.entries(templates).map(([key]) => (
-                <motion.button
+                <button
                   key={key}
                   onClick={() => setTemplate(key)}
-                  className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-md border text-sm font-medium transition-colors ${
                     template === key
-                      ? 'border-blue-500 bg-blue-500/10 text-blue-400'
-                      : 'border-gray-700 hover:border-blue-500/50 text-gray-400'
+                      ? 'border-[#8B5CF6] bg-[#8B5CF6]/5 text-[#8B5CF6]'
+                      : 'border-gray-200 text-gray-700 hover:border-[#8B5CF6]/50'
                   }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   {key.charAt(0).toUpperCase() + key.slice(1)}
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Editor Section */}
+          {/* Form Section */}
           <div className="space-y-6">
             <form onSubmit={handleSubmit(handleGenerate)} className="space-y-6">
               <FormCard title="Personal Information" icon={FaUser}>
@@ -206,7 +185,7 @@ export default function CoverLetterBuilder() {
                   </div>
                   <div>
                     <label className={labelClasses}>Experience Level</label>
-                    <select {...register('experienceLevel')} className={inputClasses}>
+                    <select {...register('experienceLevel')} className={selectClasses}>
                       <option value="entry">Entry Level</option>
                       <option value="mid">Mid Level</option>
                       <option value="senior">Senior Level</option>
@@ -215,71 +194,55 @@ export default function CoverLetterBuilder() {
                   </div>
                   <div>
                     <label className={labelClasses}>Notable Achievements</label>
-                    <textarea {...register('achievements')} rows={3} className={inputClasses} 
+                    <textarea {...register('achievements')} className={textareaClasses} 
                       placeholder="List your relevant achievements..." />
                   </div>
                   <div>
                     <label className={labelClasses}>Company Research</label>
-                    <textarea {...register('companyInfo')} rows={3} className={inputClasses}
+                    <textarea {...register('companyInfo')} className={textareaClasses}
                       placeholder="What interests you about this company? Any recent news or developments?" />
                   </div>
                 </div>
               </FormCard>
 
-              <motion.div variants={itemVariants} className="flex justify-between items-center">
-                <motion.button
+              <div className="flex justify-end">
+                <button
                   type="submit"
-                  className={`inline-flex items-center space-x-2 px-6 py-3 rounded-xl text-white font-medium transition-all duration-200 ${
+                  className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium text-white ${
                     isGenerating
-                      ? 'bg-gray-700 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90'
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-[#8B5CF6] hover:bg-[#7C3AED]'
                   }`}
                   disabled={isGenerating}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   {isGenerating ? (
-                    <>
-                      <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>Generating...</span>
-                    </>
+                    'Generating...'
                   ) : (
                     <>
-                      <FaMagic className="h-5 w-5" />
-                      <span>Generate Cover Letter</span>
+                      <FaMagic className="mr-2 h-4 w-4" />
+                      Generate Cover Letter
                     </>
                   )}
-                </motion.button>
-
-                <ExportOptions 
-                  resumeData={coverLetterData}
-                  componentRef={componentRef}
-                />
-              </motion.div>
+                </button>
+              </div>
             </form>
           </div>
 
           {/* Preview Section */}
-          <motion.div
-            variants={itemVariants}
-            className="bg-gray-800/50 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden"
-          >
-            <div className="p-4 border-b border-white/10 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-white">Preview</h3>
-              <div className="flex items-center space-x-2 text-gray-400">
-                <FaDownload className="h-5 w-5" />
-                <span>Export</span>
-              </div>
+          <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium text-gray-900">Preview</h3>
+              <ExportOptions 
+                resumeData={coverLetterData}
+                componentRef={componentRef}
+              />
             </div>
-            <div ref={componentRef} className="p-8 bg-white">
+            <div ref={componentRef} className="bg-white border rounded-lg">
               <TemplateComponent data={coverLetterData} />
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

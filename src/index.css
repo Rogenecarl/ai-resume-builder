@@ -1,3 +1,135 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom scrollable select styles */
+select {
+  scrollbar-width: thin;
+  scrollbar-color: #8B5CF6 #f3f4f6;
+}
+
+select::-webkit-scrollbar {
+  width: 6px;
+}
+
+select::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 20px;
+}
+
+select::-webkit-scrollbar-thumb {
+  background-color: #8B5CF6;
+  border-radius: 20px;
+  border: 2px solid #f3f4f6;
+}
+
+/* Style for select options */
+select option {
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+select option:hover {
+  background-color: #f3f4f6;
+}
+
+select option:checked {
+  background-color: #8B5CF6;
+  color: white;
+}
+
+/* Ensure dropdown height is limited and scrollable */
+select[multiple],
+select[size] {
+  height: auto;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+/* Custom select height for location dropdowns */
+select[name="country"],
+select[name="city"],
+select[name="phoneCountry"] {
+  height: 40px;
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+}
+
+/* Phone input group styling */
+.phone-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.phone-input-group select {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.phone-input-group input {
+  flex: 1;
+}
+
+/* Dropdown open state */
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #8B5CF6/20;
+}
+
+/* Override default select appearance */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: none !important;
+}
+
+/* Disabled state styling */
+select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* Dropdown list container */
+select[name="country"] option,
+select[name="city"] option,
+select[name="phoneCountry"] option {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover effect for dropdown items */
+select[name="country"] option:hover,
+select[name="city"] option:hover,
+select[name="phoneCountry"] option:hover {
+  background-color: #8B5CF6/5;
+}
+
+/* Selected option styling */
+select[name="country"] option:checked,
+select[name="city"] option:checked,
+select[name="phoneCountry"] option:checked {
+  background-color: #8B5CF6/10;
+  font-weight: 500;
+}
+
+/* Custom dropdown animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+select:focus option {
+  animation: slideDown 0.2s ease;
+}
